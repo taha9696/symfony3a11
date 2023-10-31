@@ -1,3 +1,7 @@
+<form action="{{ path('app_showBook') }}" method="get">
+    <input type="text" name="" placeholder="Rechercher par Référence">
+    <button type="submit">Rechercher</button>
+</form>
 
 <table>
 <tr>
@@ -24,4 +28,6 @@
 </table>
 <p>Number of published books: {{ publishedBooksCount }}</p>
 <p>Number of unpublished books: {{ unpublishedBooksCount }}</p>
-    
+foreach ($books as $book) {
+    echo $book->getTitle() . ' - ' . $book->getPublicationDate()->format('Y-m-d') . '<br>';
+}    

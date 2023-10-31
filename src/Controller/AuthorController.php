@@ -72,4 +72,25 @@ class AuthorController extends AbstractController
         return $this->render('author/add.html.twig',['f'=>$form->createView()]);
 
     }
+    public function searchAuthors(Request $request, AuthorRepository $authorRepository)
+    {
+        $minBooks = $request->request->get('minBooks');
+        $maxBooks = $request->request->get('maxBooks');
+
+        $authors = $authorRepository->findAuthorsByBookCountRange($minBooks, $maxBooks);
+
+        
+    }
+    public function deleteAuthorsWithZeroBooks(AuthorRepository $authorRepository, EntityManagerInterface $entityManager)
+    {
+        $authorsToDelete = $authorRepository->findAuthorsWithZeroBooks();
+
+        foreach ($authorsToDelete as $author) {
+            $entityManager->remove($author);
+        }
+
+        $entityManager->flush();
+
+        
+    }
 }

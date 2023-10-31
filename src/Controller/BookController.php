@@ -14,7 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
    #[Route('/book/get/all',name:'app_get_all_book')]
-    public function getAll(BookRepository $repo){
+    public function getAll(Request $request,BookRepository $repo){
+        $ref=$request->query->get('ref');
+        if($ref){$book=$bookRepository->searchBookByRef($ref);}
+    
         $books = $repo->findAll();
         $publishedBooksCount = $repo->count(['published' => 1]);
         $unpublishedBooksCount = $repo->count(['published' => 0]);
@@ -76,5 +79,42 @@ class BookController extends AbstractController
 
         ]);
     }
+    public function booksListByAuthors(BookRepository $bookRepository)
+    {
+        $books = $bookRepository->booksListByAuthors();
+
+        
+    }
+    public function listBooksBeforeYearWithAuthors(BookRepository $bookRepository)
+    {
+        $books = $bookRepository->findBooksBeforeYearWithAuthors();
+
+    }
+    public function updateScienceFictionToRomance(BookRepository $bookRepository, EntityManagerInterface $entityManager)
+    {
+        $scienceFictionBooks = $bookRepository->findScienceFictionBooks();
+
+        foreach ($scienceFictionBooks as $book) {
+          
+            $book->setCategory("Romance");
+            $entityManager->persist($book);
+        }
+
+       
+        $entityManager->flush();
+
+        
+    }
+    public function listBooksBetweenDates(BookRepository $bookRepository)
+    {
+        $startDate = new \DateTime('2014-01-01');
+        $endDate = new \DateTime('2018-12-31');
+
+        $books = $bookRepository->findBooksBetweenDates($startDate, $endDate);
+
+        
+    }
+
+
 
 }
