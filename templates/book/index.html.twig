@@ -1,0 +1,27 @@
+
+<table>
+<tr>
+<td>ref</td>
+<td>title</td>
+<td>category</td>
+<td>publicationDate</td>
+<td>author</td>    
+</tr>
+{% for a in books %}
+<tr>
+    <td>{{ a.ref }}</td>
+    <td>{{ a.title }}</td>    
+    <td>{{ a.category }}</td>
+    <td>{{ a.publicationDate | date}}</td>
+    <td>{{ a.author.username }}</td>    
+    <td><a href="{{path('app_delete_book',{'id':a.ref})}}">Delete</a></td>
+    <td><a href="{{path('app_update_book',{'ref':a.ref})}}">Update</a></td>
+    <td><a href="{{path('app_showBook',{'ref':a.ref})}}">Show</a></td>
+    </tr>
+   
+{% endfor %}
+
+</table>
+<p>Number of published books: {{ publishedBooksCount }}</p>
+<p>Number of unpublished books: {{ unpublishedBooksCount }}</p>
+    
